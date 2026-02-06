@@ -3,7 +3,7 @@ This project explores the use of data wrangling principles to construct an R/Tid
 
 # Tidyverse Form 8949 Generator
 
-**Automated IRS Tax Reporting for High-Volume Collectible Sales (LEGO & Vinyl)**
+**Automated IRS Tax Reporting for High-Volume Collectible Sales (e.g. LEGO, toys, & Vinyl)**
 
 ![R](https://img.shields.io/badge/Made%20with-R-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
