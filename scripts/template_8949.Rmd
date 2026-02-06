@@ -1,0 +1,113 @@
+---
+title: "Form 8949 - Sales and Other Dispositions of Capital Assets"
+author: "Larry Mannings"
+date: "2026-02-04"
+output: 
+  pdf_document:
+    latex_engine: pdflatex
+params:
+  df: NA
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{pdflscape} # Added for landscape
+  - \usepackage{colortbl}
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(lubridate)
+
+# Ensure dates are in the correct format
+df_processed <- params$df %>%
+  mutate(
+    Acq_Date = mdy(Date_Acquired),
+    Sold_Date = mdy(Date_Sold),
+    Holding_Period = as.numeric(Sold_Date - Acq_Date)
+  )
+
+# Split the data
+short_term <- df_processed %>% filter(Holding_Period <= 365)
+long_term <- df_processed %>% filter(Holding_Period > 365)
+```
+
+\begin{landscape}
+
+Part I: Short-Term Capital Gains and Losses
+Assets held one year or less.
+
+```{r short_term, echo=FALSE, message=FALSE, warning=FALSE}
+# Create total row
+# 1. Clean the data: Remove '$' and ',' then convert to numeric
+short_term_numeric <- short_term %>%
+  mutate(across(c(Proceeds, Cost_Basis, Gain_Loss), 
+                ~ as.numeric(gsub("[\\$,]", "", .))))
+
+# 2. Create the total row
+short_total <- short_term_numeric %>%
+  summarise(
+    Description = "GRAND TOTAL", 
+    Date_Acquired = "", 
+    Date_Sold = "",
+    Proceeds = sum(Proceeds, na.rm = TRUE), 
+    Cost_Basis = sum(Cost_Basis, na.rm = TRUE), 
+    Gain_Loss = sum(Gain_Loss, na.rm = TRUE),
+    Marketplace = ""
+  )
+
+# 3. Combine and format back to currency for the table
+short_final <- bind_rows(short_term_numeric, short_total) %>%
+  mutate(across(c(Proceeds, Cost_Basis, Gain_Loss), 
+                ~ scales::dollar(.)))
+
+# 4. Generate the table
+knitr::kable(short_final |>
+               select(Description, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace),
+             format = "latex", 
+             booktabs = TRUE, 
+             longtable = TRUE) %>%
+  kable_styling(latex_options = c("striped", "repeat_header"), font_size = 10) %>% # scale_down added
+  column_spec(1, width = "9cm") %>% # Forces text wrapping in the Description column
+  row_spec(nrow(short_final), bold = TRUE, background = "yellow")
+```
+
+Part II: Long-Termm Capital Gains and Losses
+Assets held more than one year
+
+```{r long_term, echo=FALSE, message=FALSE, warning=FALSE}
+# 1. Clean data: Remove symbols and cast to numeric
+long_term_numeric <- long_term %>%
+  mutate(across(c(Proceeds, Cost_Basis, Gain_Loss), 
+                ~ as.numeric(gsub("[\\$,]", "", .))))
+
+# 2. Create the total row
+long_total <- long_term_numeric %>%
+  summarise(
+    Description = "GRAND TOTAL", 
+    Date_Acquired = "", 
+    Date_Sold = "",
+    Proceeds = sum(Proceeds, na.rm = TRUE), 
+    Cost_Basis = sum(Cost_Basis, na.rm = TRUE), 
+    Gain_Loss = sum(Gain_Loss, na.rm = TRUE),
+    Marketplace = ""
+  )
+
+# 3. Combine and format for display
+long_final <- bind_rows(long_term_numeric, long_total) %>%
+  mutate(across(c(Proceeds, Cost_Basis, Gain_Loss), 
+                ~ scales::dollar(.)))
+
+# 4. Generate the landscape, multi-page table
+knitr::kable(long_final |>
+               select(Description, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace), 
+             format = "latex", 
+             booktabs = TRUE, 
+             longtable = TRUE) %>%
+  kable_styling(latex_options = c("striped", "repeat_header"), font_size = 10) %>%
+  column_spec(1, width = "9cm") %>% # Adjust width as needed for landscape
+  row_spec(nrow(long_final), bold = TRUE, background = "yellow")
+```
+
+\end{landscape}
