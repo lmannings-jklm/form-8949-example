@@ -23,5 +23,5 @@ data_clean <- data %>%
 
 # 3. Generate the PDF using an R Markdown template
 render("scripts/template_8949.Rmd", 
-       output_file = paste0("Form_8949_", Sys.Date(), ".pdf"),
+       output_file = paste0("../output/Form_8949_", Sys.Date(), ".pdf"),
        params = list(df = data_clean))
