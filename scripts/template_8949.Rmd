@@ -1,7 +1,7 @@
 ---
 title: "Form 8949 - Sales and Other Dispositions of Capital Assets"
-author: "Larry Mannings"
-date: "2026-02-04"
+author: "JKLM Data"
+date: "`r Sys.Date()`"
 output: 
   pdf_document:
     latex_engine: pdflatex
@@ -48,7 +48,7 @@ short_term_numeric <- short_term %>%
 # 2. Create the total row
 short_total <- short_term_numeric %>%
   summarise(
-    Description = "GRAND TOTAL", 
+    Order_ID = "GRAND TOTAL", 
     Date_Acquired = "", 
     Date_Sold = "",
     Proceeds = sum(Proceeds, na.rm = TRUE), 
@@ -64,7 +64,7 @@ short_final <- bind_rows(short_term_numeric, short_total) %>%
 
 # 4. Generate the table
 knitr::kable(short_final |>
-               select(Description, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace),
+               select(Order_ID, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace),
              format = "latex", 
              booktabs = TRUE, 
              longtable = TRUE) %>%
@@ -73,7 +73,7 @@ knitr::kable(short_final |>
   row_spec(nrow(short_final), bold = TRUE, background = "yellow")
 ```
 
-Part II: Long-Termm Capital Gains and Losses
+Part II: Long-Term Capital Gains and Losses
 Assets held more than one year
 
 ```{r long_term, echo=FALSE, message=FALSE, warning=FALSE}
@@ -85,7 +85,7 @@ long_term_numeric <- long_term %>%
 # 2. Create the total row
 long_total <- long_term_numeric %>%
   summarise(
-    Description = "GRAND TOTAL", 
+    Order_ID = "GRAND TOTAL", 
     Date_Acquired = "", 
     Date_Sold = "",
     Proceeds = sum(Proceeds, na.rm = TRUE), 
@@ -101,7 +101,7 @@ long_final <- bind_rows(long_term_numeric, long_total) %>%
 
 # 4. Generate the landscape, multi-page table
 knitr::kable(long_final |>
-               select(Description, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace), 
+               select(Order_ID, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Gain_Loss, Marketplace), 
              format = "latex", 
              booktabs = TRUE, 
              longtable = TRUE) %>%
