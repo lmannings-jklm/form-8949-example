@@ -33,10 +33,11 @@ Created by **JKLM Data Analytics**, this tool solves the challenge of manually r
 
 ```text
 JKLM_Tax_Project/
-├── generate_8949.R          # Controller script: loads data & renders PDF
-├── template_8949.Rmd        # R Markdown template with LaTeX formatting logic
+|-- scripts/
+|   |-- data_scrubber.R          # Sanitizes privacy data for public consumption
+|   |-- generate_8949.R          # Controller script: loads data & renders PDF
+|   |-- template_8949.Rmd        # R Markdown template with LaTeX formatting logic
 ├── data/
-│   ├── sales_2025.csv       # Input: Your raw transaction data
-│   └── public_demo.csv      # Output: Sanitized data for sharing
+|    |-- public_demo.csv      # Output: Sanitized data for sharing
 └── output/
     └── Form_8949_2026-02-04.pdf  # Final generated tax statement
