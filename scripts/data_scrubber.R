@@ -6,8 +6,10 @@
 # "Long-term vs. Short-term" logic. Lastly the Description column is dropped 
 # from the sanitized table.
 
-library(tidyverse)
-library(digest)
+library(tidyverse)  # Load collection of R tools designed specifically for
+                    # data science
+library(digest) # Load tool used to create cryptographic hash digests of R 
+                # objects.
 
 # Load your real data
 real_data <- read_csv("C:/School/R_wd/tax_2025/data/Private/2025_sales_8949.csv")
@@ -29,14 +31,18 @@ public_data <- real_data %>%
     Cost_Basis = Cost_Basis * runif(n(), 0.75, 1.25),
     Gain_Loss = Proceeds - Cost_Basis
   ) %>%
-  # 4. Remove any columns with Names or Addresses
+  
+  # 4. Remove any columns with Names or Addresses (not used in this case)
   #select(-matches("Name|Address|Email|Phone|Description"))
+  
   # 4a. Return a set of columns as a new table
-  select(Order_ID, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Code, Adjustment, Gain_Loss, Marketplace)
+  select(Order_ID, Date_Acquired, Date_Sold, Proceeds, Cost_Basis, Code, 
+         Adjustment, Gain_Loss, Marketplace)
 
 # 5. Re-format back to currency
 public_data <- public_data |> 
   mutate(across(c(Proceeds, Cost_Basis, Gain_Loss), 
                 ~ scales::dollar(.)))
 
+# 6. Write data frame to file
 write_csv(public_data, "data/public_demo_sales.csv")

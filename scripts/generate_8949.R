@@ -5,9 +5,10 @@
 
 # This script prepares your data and calls a markdown template to generate the PDF.
 
-library(tidyverse)
-library(rmarkdown)
-library(lubridate)
+library(tidyverse)  # Load collection of R tools designed specifically for
+                    # data science
+library(rmarkdown)  # Load tool for adding r code chunks to standard Markdown
+library(lubridate)  # Load tool for handling dates and times
 
 # 1. Load your Tidyverse-compliant CSV
 # Ensure columns: Description, Date_Acquired, Date_Sold, Proceeds, Cost_Basis
