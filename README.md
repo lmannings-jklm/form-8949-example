@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-# form-8949-example
-This project explores the use of data wrangling principles to construct an R/Tidyverse script that imports asset sales data and generates an IRS tax return compliant form 8949.
-
-# Tidyverse Form 8949 Generator
-
-=======
 # Tidyverse Form 8949 Generator
 
 This project explores the use of data wrangling principles to construct an R/Tidyverse script that imports asset sales data and generates an IRS tax return compliant form 8949.
 
->>>>>>> 7b6b2c89b1fe91c37578157da40620539bada5b5
 **Automated IRS Tax Reporting for High-Volume Collectible Sales (e.g. LEGO, toys, & Vinyl)**
 
 ![R](https://img.shields.io/badge/Made%20with-R-blue.svg)
